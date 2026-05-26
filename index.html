@@ -340,19 +340,19 @@
       <div class="divider"></div>
 
       <label class="q-label">Nombre <span class="req">*</span></label>
-      <input type="text" id="nombre" placeholder="Tu nombre">
+      <input type="text" id="nombre" name="nombre" placeholder="Tu nombre">
       <div class="error-hint" id="err-nombre">Este campo es obligatorio.</div>
 
       <label class="q-label">Apellidos <span class="req">*</span></label>
-      <input type="text" id="apellidos" placeholder="Tus apellidos">
+      <input type="text" id="apellidos" name="apellidos" placeholder="Tus apellidos">
       <div class="error-hint" id="err-apellidos">Este campo es obligatorio.</div>
 
       <label class="q-label">Mail <span class="req">*</span></label>
-      <input type="email" id="mail" placeholder="correo@ejemplo.com">
+      <input type="email" id="mail" name="mail" placeholder="correo@ejemplo.com">
       <div class="error-hint" id="err-mail">Introduce un correo electrónico válido.</div>
 
       <label class="q-label">Área en la que trabajas en la OTEMP <span class="req">*</span></label>
-      <input type="text" id="area" placeholder="Ej.: Planificación, Ingeniería, Gestión...">
+      <input type="text" id="area" name="area" placeholder="Ej.: Planificación, Ingeniería, Gestión...">
       <div class="error-hint" id="err-area">Este campo es obligatorio.</div>
     </div>
 
@@ -368,7 +368,7 @@
         ¿Cuáles son las tareas que realizas en el día a día?
         <span class="req">*</span>
       </div>
-      <textarea id="q1" placeholder="Describe brevemente las tareas que realizas en el día a día..."></textarea>
+      <textarea id="q1" name="q1" placeholder="Describe brevemente las tareas que realizas en el día a día..."></textarea>
       <div class="error-hint" id="err-q1">Este campo es obligatorio.</div>
 
       <div style="height:20px;"></div>
@@ -379,7 +379,7 @@
         ¿Cuáles son las tareas que suponen una mayor carga de trabajo para ti?
         <span class="req">*</span>
       </div>
-      <textarea id="q2" placeholder="Indica cuáles son más demandantes en tiempo o esfuerzo..."></textarea>
+      <textarea id="q2" name="q2" placeholder="Indica cuáles son más demandantes en tiempo o esfuerzo..."></textarea>
       <div class="error-hint" id="err-q2">Este campo es obligatorio.</div>
 
       <div style="height:20px;"></div>
@@ -397,7 +397,7 @@
       <div class="error-hint" id="err-picos">Por favor, selecciona una opción.</div>
       <div class="conditional" id="cond-picos">
         <label class="q-label">¿A qué se debe?</label>
-        <textarea id="q3-causa" placeholder="Describe a qué se deben estos picos de trabajo..."></textarea>
+        <textarea id="q3-causa" name="q3-causa" placeholder="Describe a qué se deben estos picos de trabajo..."></textarea>
       </div>
 
       <div style="height:20px;"></div>
@@ -408,7 +408,7 @@
         Dentro de las tareas que realizas en el día a día, ¿propones algún aspecto de mejora para optimizar el trabajo diario de la oficina técnica?
         <span class="req">*</span>
       </div>
-      <textarea id="q4" placeholder="Comparte cualquier idea o propuesta que consideres útil..."></textarea>
+      <textarea id="q4" name="q4" placeholder="Comparte cualquier idea o propuesta que consideres útil..."></textarea>
       <div class="error-hint" id="err-q4">Este campo es obligatorio.</div>
 
       <div style="height:20px;"></div>
@@ -418,7 +418,7 @@
         <span class="q-num">5</span>
         ¿Tienes alguna observación o algo que quieras añadir?
       </div>
-      <textarea id="q5" placeholder="Espacio libre para cualquier comentario adicional..."></textarea>
+      <textarea id="q5" name="q5" placeholder="Espacio libre para cualquier comentario adicional..."></textarea>
     </div>
 
     <div class="nav-buttons">
@@ -502,10 +502,24 @@
     }
 
     if (valid) {
-      document.getElementById('survey-form').style.display = 'none';
-      document.getElementById('success-screen').style.display = 'block';
-      document.getElementById('progressBar').style.width = '100%';
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      var form = document.getElementById('survey-form');
+  var datos = new FormData(form);
+
+  fetch("https://script.google.com/macros/s/AKfycbzJXrF4cLs0XmwOU8mLRbAcIO1apkMfmXByuCr14-IFmHdiweeiiRQ1al129hxAYlD4Ew/exec", {
+    method: "POST",
+    mode: "no-cors",
+    body: datos
+  })
+  .then(function() {
+    form.style.display = 'none';
+    document.getElementById('success-screen').style.display = 'block';
+    document.getElementById('progressBar').style.width = '100%';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  })
+  .catch(function() {
+    alert("Ha ocurrido un error al enviar las respuestas. Inténtalo de nuevo.");
+  });
+      
     } else {
       var first = document.querySelector('.invalid, .error-hint[style*="block"]');
       if (first) first.scrollIntoView({ behavior: 'smooth', block: 'center' });
